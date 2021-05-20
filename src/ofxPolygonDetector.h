@@ -127,7 +127,7 @@ struct ofxPolyLine
     bool betweenNeighbors(ofxPolygonDetector& pd, const ofxPolyLine& l1, const ofxPolyLine& l2) const;
 };
 
-struct PolyPol
+struct ofxPolyPol
 {
     vector<PointType> p;
     PointType c;
@@ -139,7 +139,7 @@ struct PolyPol
     double _area;
     int getCount() const;
     void calculateFirstAndLastPoint();
-    bool minus(const PolyPol& other);
+    bool minus(const ofxPolyPol& other);
     void addLine(const ofxPolyLine& l);
     int roundArea();
     bool addPointChecked(const PointType& v);
@@ -153,7 +153,7 @@ struct ofxPolygonDetector
 {
     using LineVector = vector<ofxPolyLine>;
     using LineList = list<ofxPolyLine>;
-    using PolyVector = vector<PolyPol>;
+    using PolyVector = vector<ofxPolyPol>;
 
     PolyCycles _cycles;
 

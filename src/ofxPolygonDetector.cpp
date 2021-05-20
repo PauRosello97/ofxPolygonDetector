@@ -963,7 +963,7 @@ bool ofxPolygonDetector::findPolys()
             continue;
         }
 
-        PolyPol poly;
+        ofxPolyPol poly;
         PointType* last = nullptr;
         for (auto& id : lidx)
         {
@@ -1684,7 +1684,7 @@ int ofxPolyLine::otherPid(int pid) const
 }
 
 // --------------------- POLYPOL
-PointType PolyPol::center()
+PointType ofxPolyPol::center()
 {
     if (p.empty())
         return PointType(0);
@@ -1701,7 +1701,7 @@ PointType PolyPol::center()
 *       an single relationship between them
 * @return true if polygon were changed, false otherwise
 */
-bool PolyPol::minus(const PolyPol& other)
+bool ofxPolyPol::minus(const ofxPolyPol& other)
 {
     for (auto itOther = other.p.begin(); itOther != other.p.end(); ++itOther)
     {
@@ -1717,7 +1717,7 @@ bool PolyPol::minus(const PolyPol& other)
     }
     return true;
 }
-void PolyPol::calculateFirstAndLastPoint()
+void ofxPolyPol::calculateFirstAndLastPoint()
 {
     // if there are only one vertex it is not a polyline
     if (p.size() < 2)
@@ -1740,12 +1740,12 @@ void PolyPol::calculateFirstAndLastPoint()
         }
     }
 }
-void PolyPol::addLine(const ofxPolyLine& l)
+void ofxPolyPol::addLine(const ofxPolyLine& l)
 {
     p.push_back(l.a);
     p.push_back(l.b);
 }
-double PolyPol::triangleArea(ofxPolygonDetector& pd)
+double ofxPolyPol::triangleArea(ofxPolygonDetector& pd)
 {
     if (p.size() <= 2)
         return 0.0f;
@@ -1761,7 +1761,7 @@ double PolyPol::triangleArea(ofxPolygonDetector& pd)
     }
     return area;
 }
-bool PolyPol::addPointChecked(const PointType& v)
+bool ofxPolyPol::addPointChecked(const PointType& v)
 {
     for (auto& pt : p)
         if (!pointsDiffer(pt, v))
@@ -1769,10 +1769,10 @@ bool PolyPol::addPointChecked(const PointType& v)
     p.push_back(v);
     return true;
 }
-void PolyPol::setColor(ofColor c) {
+void ofxPolyPol::setColor(ofColor c) {
     color = c;
 }
-void PolyPol::draw() {
+void ofxPolyPol::draw() {
     ofSetColor(color);
     ofBeginShape();
     for (int i = 0; i < p.size(); i++) {
@@ -1780,8 +1780,8 @@ void PolyPol::draw() {
     }
     ofEndShape();
 }
-int PolyPol::getCount() const { return (int)p.size(); }
-int PolyPol::roundArea() {
+int ofxPolyPol::getCount() const { return (int)p.size(); }
+int ofxPolyPol::roundArea() {
     return round(_area);
 }
 
