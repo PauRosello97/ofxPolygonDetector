@@ -666,6 +666,7 @@ void ofxPolygonDetector::sortLines(void)
 }
 bool ofxPolygonDetector::detectPolygons()
 {
+    reset();
     polys.clear();
 
     if (!createLines())
@@ -1261,7 +1262,6 @@ bool ofxPolygonDetector::rmLines(RmLinesType type)
 void ofxPolygonDetector::reset()
 {
     _cycles.clear();
-    //origLines.clear();
     lines.clear();
     polys.clear();
     _neighbors.clear();
