@@ -1,7 +1,6 @@
 # ofxPolygonDetector
 
-
-ofxHLuv is an implementation of HLuv for OpenFrameworks. HLuv is a perceptually uniform color space with a constant luminance. 
+Detect all closed polygons given a set of line segments
 
 ## Installation
 
