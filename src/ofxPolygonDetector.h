@@ -15,7 +15,7 @@
 static const float minPointDiff = 0.001;
 static const float minPointDiffSq = minPointDiff * minPointDiff;
 
-struct PolyLine;
+struct ofxPolyLine;
 struct ofxPolygonDetector;
 
 struct PointType
@@ -46,8 +46,8 @@ bool onSegment(const PointType& p, const PointType& q, const PointType& r);
 bool collinearVecs(const PointType& p, const PointType& q, const PointType& r);
 bool between(const PointType& p, const PointType& a, const PointType& b);
 bool pointsDiffer(const PointType& a, const PointType& b, bool aprox = true);
-bool overlap(const PolyLine& l1, const PolyLine& l2);
-int simplifiedLine(const PolyLine& line_1, const PolyLine& line_2, PolyLine& ret);
+bool overlap(const ofxPolyLine& l1, const ofxPolyLine& l2);
+int simplifiedLine(const ofxPolyLine& line_1, const ofxPolyLine& line_2, ofxPolyLine& ret);
 int iComparePointOrder(const PointType& p1, const PointType& p2);
 bool bComparePointOrder(const PointType& p1, const PointType& p2);
 
@@ -79,12 +79,12 @@ struct PolyCycle
 
 using PolyCycles = vector<PolyCycle>;
 
-struct PolyLine
+struct ofxPolyLine
 {
     PointType a, b;
 
-    PolyLine() {}
-    PolyLine(const PointType& aP, const PointType& bP) : a(aP), b(bP) {}
+    ofxPolyLine() {}
+    ofxPolyLine(const PointType& aP, const PointType& bP) : a(aP), b(bP) {}
 
     vector<int> intersections;
     set<int> intersectedLines;
@@ -99,32 +99,32 @@ struct PolyLine
     int aIdx = 0, bIdx = 0;
     int lastDissolveStep = 0;
     void calcCenter();
-    bool hasCommonIdxPoints(const PolyLine& line) const;
+    bool hasCommonIdxPoints(const ofxPolyLine& line) const;
     void sortIntersectionsList(ofxPolygonDetector& pd);
-    bool IntersectionPoint(const PolyLine& line, PointType& pos) const;
-    bool lineLineIntersectionPoint(const PolyLine& line, PointType& pos) const;
+    bool IntersectionPoint(const ofxPolyLine& line, PointType& pos) const;
+    bool lineLineIntersectionPoint(const ofxPolyLine& line, PointType& pos) const;
     void calculateFirstAndLastPoint();
-    static bool bCompareLineOrder(const PolyLine& l1, PolyLine& l2);
-    static int iCompareLineOrder(const PolyLine& l1, PolyLine& l2);
+    static bool bCompareLineOrder(const ofxPolyLine& l1, ofxPolyLine& l2);
+    static int iCompareLineOrder(const ofxPolyLine& l1, ofxPolyLine& l2);
     string neighToString(ofxPolygonDetector& pd, int* retNNeigh = nullptr) const;
     string toString(ofxPolygonDetector& pd) const;
     int numNeigh(ofxPolygonDetector& pd) const;
     int numIntersections(ofxPolygonDetector& pd) const;
     int canBeRemoved(ofxPolygonDetector& pd, RmLinesType type) const;
-    PolyLine& mul(float m);
-    PolyLine& add(const PointType& p);
+    ofxPolyLine& mul(float m);
+    ofxPolyLine& add(const PointType& p);
     void setIgnore(ofxPolygonDetector& pd, const char* msg);
     bool contains(const PointType& point) const;
-    bool contains(const PolyLine& line) const;
-    bool collinear(const PolyLine& l) const;
+    bool contains(const ofxPolyLine& line) const;
+    bool collinear(const ofxPolyLine& l) const;
     int minPid() const;
     int maxPid() const;
-    int32_t commonPid(const PolyLine& l) const;
+    int32_t commonPid(const ofxPolyLine& l) const;
     int otherPid(int pid) const;
     bool compareNeigh(ofxPolygonDetector& pd, int nid1, int nid2) const;
     bool sortNeigh(ofxPolygonDetector& pd) const;
     int& incTook(ofxPolygonDetector& pd);
-    bool betweenNeighbors(ofxPolygonDetector& pd, const PolyLine& l1, const PolyLine& l2) const;
+    bool betweenNeighbors(ofxPolygonDetector& pd, const ofxPolyLine& l1, const ofxPolyLine& l2) const;
 };
 
 struct PolyPol
@@ -140,7 +140,7 @@ struct PolyPol
     int getCount() const;
     void calculateFirstAndLastPoint();
     bool minus(const PolyPol& other);
-    void addLine(const PolyLine& l);
+    void addLine(const ofxPolyLine& l);
     int roundArea();
     bool addPointChecked(const PointType& v);
     void setColor(ofColor color);
@@ -151,8 +151,8 @@ struct PolyPol
 
 struct ofxPolygonDetector
 {
-    using LineVector = vector<PolyLine>;
-    using LineList = list<PolyLine>;
+    using LineVector = vector<ofxPolyLine>;
+    using LineList = list<ofxPolyLine>;
     using PolyVector = vector<PolyPol>;
 
     PolyCycles _cycles;
@@ -172,15 +172,15 @@ struct ofxPolygonDetector
     int dissolveCount = 0;
 
     void reset();
-    void addLine(const PolyLine& line);
-    bool detectPolygons();
+    void addLine(const ofxPolyLine& line);
+    bool detectPolygons(LineVector lineVector);
     PolyVector& getPolys() { return polys; }
 
     bool addPointToLine(int pid, int lid);
 
-    PolyLine* findLine(int id, bool useIgnore = true);
-    PolyLine* findLine(int pidA, int pidB, bool useIgnore = true);
-    PolyLine* findOrigLine(int id);
+    ofxPolyLine* findLine(int id, bool useIgnore = true);
+    ofxPolyLine* findLine(int pidA, int pidB, bool useIgnore = true);
+    ofxPolyLine* findOrigLine(int id);
 
     int getPolyCount() const { return (int)polys.size(); };
     void sortLines();
@@ -195,19 +195,19 @@ struct ofxPolygonDetector
 
     bool buildCycle(int id, PolyCycle cycle); // as value!
 
-    PolyLine newLine(int i, int j, PolyLine& origLine);
+    ofxPolyLine newLine(int i, int j, ofxPolyLine& origLine);
 
     // collinearity
     void setCollinear(int l1, int l2);
     bool collinearIdx(int l1, int l2);
-    bool collinearIdx(const PolyLine& l1, const PolyLine& l2);
+    bool collinearIdx(const ofxPolyLine& l1, const ofxPolyLine& l2);
 
     bool rmLines(RmLinesType type);
     bool rmEarPoints();
 
     // dissolve
-    bool dissolveCollinearLine(PolyLine& l);
-    bool dissolveCollinear(PolyLine& l1, PolyLine& l2);
+    bool dissolveCollinearLine(ofxPolyLine& l);
+    bool dissolveCollinear(ofxPolyLine& l1, ofxPolyLine& l2);
     bool dissolve();
 
     void dumpLines(const char* msg, bool useIgnore = false);
