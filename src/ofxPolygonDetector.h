@@ -125,6 +125,7 @@ struct ofxPolyLine
     bool sortNeigh(ofxPolygonDetector& pd) const;
     int& incTook(ofxPolygonDetector& pd);
     bool betweenNeighbors(ofxPolygonDetector& pd, const ofxPolyLine& l1, const ofxPolyLine& l2) const;
+    void display();
 };
 
 struct ofxPolyPol
@@ -173,7 +174,7 @@ struct ofxPolygonDetector
 
     void reset();
     void addLine(const ofxPolyLine& line);
-    bool detectPolygons(LineVector lineVector);
+    PolyVector detectPolygons(LineVector lineVector);
     PolyVector& getPolys() { return polys; }
 
     bool addPointToLine(int pid, int lid);

@@ -664,7 +664,7 @@ void ofxPolygonDetector::sortLines(void)
     }
     std::sort(lines.begin(), lines.end(), ofxPolyLine::bCompareLineOrder);
 }
-bool ofxPolygonDetector::detectPolygons(LineVector lineVector)
+vector<ofxPolyPol> ofxPolygonDetector::detectPolygons(LineVector lineVector)
 {
     origLines = lineVector;
     reset();
@@ -672,7 +672,7 @@ bool ofxPolygonDetector::detectPolygons(LineVector lineVector)
 
     if (!createLines())
     {
-        return false;
+        return {};
     }
 
     while (true)
@@ -683,7 +683,7 @@ bool ofxPolygonDetector::detectPolygons(LineVector lineVector)
 
         if (!findPolys())
         {
-            return false;
+            return {};
         }
 
         simplifyPolys(0.0);
@@ -697,7 +697,7 @@ bool ofxPolygonDetector::detectPolygons(LineVector lineVector)
             break;
     }
 
-    return true;
+    return polys;
 }
 /***
 * @desc simplifies the polygons in this set
@@ -1468,9 +1468,11 @@ void ofxPolyLine::calculateFirstAndLastPoint()
     {
         std::swap(a.x, b.x);
         std::swap(a.y, b.y);
-
         std::swap(aIdx, bIdx);
     }
+}
+void ofxPolyLine::display() {
+    ofDrawLine(a.x, a.y, b.x, b.y);
 }
 std::string ofxPolyLine::toString(ofxPolygonDetector& pd) const
 {
