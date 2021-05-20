@@ -1,6 +1,6 @@
 # ofxPolygonDetector
 
-Detect all closed polygons given a set of line segments implementing Bentley–Ottmann algorithm.
+Detect all closed polygons given a set of line segments implementing the Bentley–Ottmann algorithm.
 
 ## Installation
 
