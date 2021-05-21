@@ -1,16 +1,9 @@
 #include "ofApp.h"
 
-//--------------------------------------------------------------
 void ofApp::setup(){
 	randomize();
 }
 
-//--------------------------------------------------------------
-void ofApp::update(){
-	
-}
-
-//--------------------------------------------------------------
 void ofApp::draw(){
 	ofBackground(120);
 
@@ -49,57 +42,10 @@ void ofApp::randomize() {
 	polygons = polygonDetector.detectPolygons(lines);
 }
 
-//--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	drawLines = !drawLines;
 }
 
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
 	randomize();
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
 }
