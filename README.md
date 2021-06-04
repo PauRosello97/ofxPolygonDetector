@@ -24,6 +24,7 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## Credits
 [Catalin Stan](https://github.com/realuptime/PolyDetector)
+
 [Alfredo Ferreira, Manuel J. Fonseca, Joaquim Armando Pires Jorge](https://github.com/realuptime/PolyDetector)
 
 ## License
