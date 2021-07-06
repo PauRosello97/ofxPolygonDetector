@@ -137,7 +137,7 @@ bool pointsDiffer(const PointType& a, const PointType& b, bool aprox)
 {
     // max precision is mandatory since this can break convex polys!
     if (aprox)
-        return a.squaredist(b) >= minPointDiffSq;
+        return a.getSquaredDistance(b) >= minPointDiffSq;
     return a.x != b.x || a.y != b.y;
 }
 bool overlap(const ofxPolyLine& l1, const ofxPolyLine& l2)
@@ -225,6 +225,11 @@ ofxPolyLine ofxPolygonDetector::newLine(int i, int j, ofxPolyLine& origLine)
 
     return l;
 }
+
+/***
+* @desc Removes zero length lines, overlappings and detects intersections.
+* @return true
+*/
 bool ofxPolygonDetector::createLines()
 {
     int n = 0;
@@ -233,26 +238,25 @@ bool ofxPolygonDetector::createLines()
         l.id = n++;
     }
 
-    // prior to removing overlapping, one must
-    // remove all zero length line, otherwise the results
-    // will be unpredictable
+    // Prior to removing overlapping, one must remove all 
+    // zero length line, otherwise the results will be unpredictable.
     removeZeroLengthLines();
 
-    // then we must remove line overlapping
+    // Then we must remove line overlapping
     removeOverlappings();
 
-    // finally we detect intersections between lines
+    // Finally we detect intersections between lines
     int intersection_count = detectAllIntersections();
     if (intersection_count == 0)
         return true;
 
-    // sweep all lines
+    // Sweep all lines
     lines.clear();
     for (auto& line : origLines)
     {
         if (line.ignore) continue;
 
-        // check if current line has intersections
+        // Check if current line has intersections
         if (line.intersections.size() >= 2)
         {
             line.sortIntersectionsList(*this);
@@ -273,7 +277,7 @@ bool ofxPolygonDetector::createLines()
                     assert(pointsDiffer(p1, p2));
                 }
 
-                assert(p1.squaredist(line.a) <= p2.squaredist(line.a));
+                assert(p1.getSquaredDistance(line.a) <= p2.getSquaredDistance(line.a));
 
                 for (auto& lDup : lines)
                 {
@@ -314,7 +318,6 @@ bool ofxPolygonDetector::createLines()
             auto bIdx2 = l2.maxPid();
         }
     }
-
 
     return true;
 }
@@ -549,7 +552,7 @@ int ofxPolygonDetector::detectAllIntersections()
             if (l1.intersections.size() < 2) continue;
 
             float a, b, c;
-            PointType::line(PointType(l1.a.x, l1.a.y), PointType(l1.b.x, l1.b.y), a, b, c);
+            PointType::getLineFromPoints(PointType(l1.a.x, l1.a.y), PointType(l1.b.x, l1.b.y), a, b, c);
             if (a + b == 0.0f)
             {
                 continue;
@@ -668,7 +671,6 @@ vector<ofxPolyPol> ofxPolygonDetector::detectPolygons(LineVector lineVector)
 {
     origLines = lineVector;
     reset();
-    polys.clear();
 
     if (!createLines())
     {
@@ -1295,15 +1297,15 @@ PointType& PointType::div(const float& v)
     y /= v;
     return *this;
 }
-float PointType::squaredlen() const
+float PointType::getSquaredLength() const
 {
     return x * x + y * y;
 }
-float PointType::squaredist(const PointType& v) const
+float PointType::getSquaredDistance(const PointType& v) const
 {
-    return PointType(*this).sub(v).squaredlen();
+    return PointType(*this).sub(v).getSquaredLength();
 }
-void PointType::line(const PointType& p, const PointType& q, float& a, float& b, float& c)
+void PointType::getLineFromPoints(const PointType& p, const PointType& q, float& a, float& b, float& c)
 {
     // Line AB represented as a*x + b*y = c
     a = p.y - q.y;
@@ -1318,7 +1320,7 @@ float PointType::lineDist(float a, float b, float c, const PointType& p)
 float PointType::lineDist(const PointType& la, const PointType& lb, const PointType& p)
 {
     float a, b, c;
-    line(la, lb, a, b, c);
+    getLineFromPoints(la, lb, a, b, c);
     return lineDist(a, b, c, p);
 }
 
@@ -1459,7 +1461,7 @@ bool ofxPolyLine::lineLineIntersectionPoint(const ofxPolyLine& line, PointType& 
 void ofxPolyLine::sortIntersectionsList(ofxPolygonDetector& pd)
 {
     std::sort(intersections.begin(), intersections.end(), [&pd, this](const int& p1, const int& p2) {
-        return pd.intersectionPoints[p1].squaredist(a) < pd.intersectionPoints[p2].squaredist(a);
+        return pd.intersectionPoints[p1].getSquaredDistance(a) < pd.intersectionPoints[p2].getSquaredDistance(a);
     });
 }
 void ofxPolyLine::calculateFirstAndLastPoint()
@@ -1618,8 +1620,8 @@ bool ofxPolyLine::compareNeigh(ofxPolygonDetector& pd, int nid1, int nid2) const
         return true;
     }
 
-    auto dl1 = nl1->center.squaredist(center);
-    auto dl2 = nl2->center.squaredist(center);
+    auto dl1 = nl1->center.getSquaredDistance(center);
+    auto dl2 = nl2->center.getSquaredDistance(center);
     return dl1 < dl2;
 }
 bool ofxPolyLine::sortNeigh(ofxPolygonDetector& pd) const

@@ -31,9 +31,9 @@ struct PointType
     PointType& add(const PointType& v);
     PointType& mul(const float& v);
     PointType& div(const float& v);
-    float squaredlen() const;
-    float squaredist(const PointType& v) const;
-    static void line(const PointType& p, const PointType& q, float& a, float& b, float& c);
+    float getSquaredLength() const;
+    float getSquaredDistance(const PointType& v) const;
+    static void getLineFromPoints(const PointType& p, const PointType& q, float& a, float& b, float& c);
     static float lineDist(float a, float b, float c, const PointType& p);
     static float lineDist(const PointType& la, const PointType& lb, const PointType& p);
 };
@@ -158,9 +158,9 @@ struct ofxPolygonDetector
 
     PolyCycles _cycles;
 
-    LineVector
-        origLines, // from user
-        lines; // active lines
+    LineVector origLines; // Lines from user.
+    LineVector lines; // Lines from user filtered and fixed.
+
     PolyVector polys;
 
     map<int, vector<int>> _neighbors; // key: lid, val: vec(neighborLine)
